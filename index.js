@@ -37,4 +37,4 @@ async function postRssToWebhook() {
 
 postRssToWebhook();
 
-cron.schedule("* * * * *", postRssToWebhook);
+cron.schedule("*/10 * * * * *", postRssToWebhook);
