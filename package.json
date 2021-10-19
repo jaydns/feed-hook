@@ -1,0 +1,16 @@
+{
+	"name": "news-bot",
+	"version": "1.0.0",
+	"main": "index.js",
+	"type": "module",
+	"author": "jaydensar <jayden@jaydensar.net>",
+	"license": "MIT",
+	"dependencies": {
+		"discord.js": "^13.2.0",
+		"dotenv": "^10.0.0",
+		"entities": "^3.0.1",
+		"ioredis": "^4.28.0",
+		"node-cron": "^3.0.0",
+		"rss-parser": "^3.12.0"
+	}
+}

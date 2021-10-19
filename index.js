@@ -1,0 +1,34 @@
+import { MessageEmbed, WebhookClient } from "discord.js";
+import "dotenv/config";
+import { decodeHTML } from "entities";
+import Redis from "ioredis";
+import cron from "node-cron";
+import Parser from "rss-parser";
+
+const webhook = new WebhookClient({
+	url: process.env.WEBHOOK_URL,
+});
+const parser = new Parser();
+const redis = new Redis(process.env.REDIS_URL);
+
+async function postRssToWebhook() {
+	const feed = await parser.parseURL(process.env.FEED_URL);
+
+	for (const item of feed.items.reverse()) {
+		if (await redis.get(item.guid)) return;
+
+		const embed = new MessageEmbed()
+			.setTitle(item.title)
+			.setURL(item.link)
+			.setDescription(decodeHTML(item.content))
+			.setTimestamp(new Date(item.pubDate))
+			.setColor("#00bf39");
+
+		webhook.send({ embeds: [embed] });
+		redis.set(item.guid, "true");
+	}
+}
+
+postRssToWebhook();
+
+cron.schedule("* * * * *", postRssToWebhook);
