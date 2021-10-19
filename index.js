@@ -14,7 +14,7 @@ const redis = new Redis(process.env.REDIS_URL);
 async function postRssToWebhook() {
 	const feed = await parser.parseURL(process.env.FEED_URL);
 	console.log("Checking for new posts...");
-
+	console.log(feed.items)
 	for (const item of feed.items.reverse()) {
 		if (await redis.get(item.guid)) {
 			console.log(`${item.guid} exists, skipping...`);
