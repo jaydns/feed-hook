@@ -14,8 +14,8 @@ const redis = new Redis(process.env.REDIS_URL);
 async function postRssToWebhook() {
 	const feed = await parser.parseURL(process.env.FEED_URL);
 	console.log("Checking for new posts...");
-	console.log(feed.items)
-	for (const item of feed.items.reverse()) {
+	// using slice() because we don't want to reverse the array in place
+	feed.items.slice().reverse().forEach(async (item) => {
 		if (await redis.get(item.guid)) {
 			console.log(`${item.guid} exists, skipping...`);
 			return;
@@ -32,7 +32,7 @@ async function postRssToWebhook() {
 
 		webhook.send({ embeds: [embed] });
 		redis.set(item.guid, "true");
-	}
+	});
 }
 
 postRssToWebhook();
