@@ -11,6 +11,6 @@
 		"entities": "^3.0.1",
 		"ioredis": "^4.28.0",
 		"node-cron": "^3.0.0",
-		"rss-parser": "^3.12.0"
+		"rss-parser": "^3.13.0"
 	}
 }
